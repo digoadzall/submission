@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
+import plotly
+import seaborn
+import matplotlib
 
 # Load data
 @st.cache_data
@@ -34,33 +35,26 @@ col3.metric("Rata-rata CO", f"{df_filtered['CO'].mean():.2f} mg/m³")
 
 # Line Chart - PM2.5 Trend
 st.subheader("Tren PM2.5 dari Waktu ke Waktu")
-fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(df_filtered['date'], df_filtered['PM2.5'], marker='o', linestyle='-')
-ax.set_title("Tren PM2.5")
-ax.set_xlabel("Tanggal")
-ax.set_ylabel("PM2.5 (µg/m³)")
-st.pyplot(fig)
+fig_pm25 = plotly.express.line(df_filtered, x='date', y='PM2.5', title="Tren PM2.5", labels={'PM2.5': 'PM2.5 (µg/m³)'})
+st.plotly_chart(fig_pm25, use_container_width=True)
 
 # Scatter Plot - PM2.5 vs NO2
 st.subheader("Hubungan PM2.5 dan NO2 dengan Suhu")
-fig, ax = plt.subplots(figsize=(8, 5))
-sns.scatterplot(data=df_filtered, x='PM2.5', y='NO2', hue='TEMP', palette='coolwarm', ax=ax)
-ax.set_title("Korelasi PM2.5 & NO2")
-st.pyplot(fig)
+fig_scatter = plotly.express.scatter(df_filtered, x='PM2.5', y='NO2', color='TEMP', size_max=10,
+                         title="Korelasi PM2.5 & NO2", labels={'TEMP': 'Suhu (°C)'})
+st.plotly_chart(fig_scatter, use_container_width=True)
 
 # Bar Chart - Rata-rata Polutan per Tahun
 st.subheader("Rata-rata Polutan per Tahun")
-fig, ax = plt.subplots(figsize=(10, 5))
 df_yearly = df_filtered.groupby('year')[['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3']].mean().reset_index()
-df_yearly.plot(x='year', kind='bar', ax=ax)
-ax.set_title("Rata-rata Polutan per Tahun")
-ax.set_ylabel("Konsentrasi")
-st.pyplot(fig)
+fig_bar = plotly.express.bar(df_yearly, x='year', y=['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3'], barmode='group',
+                 title="Rata-rata Polutan per Tahun")
+st.plotly_chart(fig_bar, use_container_width=True)
 
 # Heatmap - Korelasi Antar Polutan
 st.subheader("Korelasi Antar Polutan")
-fig, ax = plt.subplots(figsize=(10, 5))
-sns.heatmap(df_filtered[['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3', 'TEMP']].corr(), annot=True, cmap='coolwarm', ax=ax)
+fig, ax = matplotlib.pyplot.subplots(figsize=(10, 5))
+seaborn.heatmap(df_filtered[['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3', 'TEMP']].corr(), annot=True, cmap='coolwarm', ax=ax)
 st.pyplot(fig)
 
 # Data Table
