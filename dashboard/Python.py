@@ -1,6 +1,5 @@
-import numpy as np
-import pandas as pd
 import streamlit as st
+import pandas as pd
 import plotly.express as px
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -8,7 +7,7 @@ import matplotlib.pyplot as plt
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv(r"C:\Dataset\Daata\PRSA_Data_Wanshouxigong_20130301-20170228.csv") 
+    df = pd.read_csv("PRSA_Data_Wanshouxigong_20130301-20170228.csv")
     df.drop(columns=["No"], inplace=True, errors='ignore')  
     df.dropna(inplace=True)  
     df['date'] = pd.to_datetime(df[['year', 'month', 'day', 'hour']])
