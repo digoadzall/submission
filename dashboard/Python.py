@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # Load data
 @st.cache_data
 def load_data():
-    df = pd.read_csv("PRSA_Data_Wanshouxigong_20130301-20170228.csv")
+    df = pd.read_csv("/mount/src/submission/dashboard/PRSA_Data_Wanshouxigong_20130301-20170228.csv")
     df.drop(columns=["No"], inplace=True, errors='ignore')  
     df.dropna(inplace=True)  
     df['date'] = pd.to_datetime(df[['year', 'month', 'day', 'hour']])
