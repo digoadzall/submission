@@ -1,7 +1,5 @@
 import streamlit as st
 import pandas as pd
-import seaborn 
-import matplotlib.pyplot
 
 # Load data
 @st.cache_data
